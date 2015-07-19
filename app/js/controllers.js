@@ -1,5 +1,5 @@
 /*!
- * Webogram v0.4.6 - messaging web application for MTProto
+ * Webogram v0.4.7 - messaging web application for MTProto
  * https://github.com/zhukov/webogram
  * Copyright (C) 2014 Igor Zhukov <igor.beatle@gmail.com>
  * https://github.com/zhukov/webogram/blob/master/LICENSE
@@ -1404,12 +1404,7 @@ angular.module('myApp.controllers', ['myApp.i18n'])
       }
 
       if (!$scope.historyState.selectActions) {
-        var sel = (
-          window.getSelection && window.getSelection() ||
-          document.getSelection && document.getSelection() ||
-          document.selection && document.selection.createRange().text || ''
-        ).toString().replace(/^\s+|\s+$/g, '');
-        if (sel) {
+        if (getSelectedText()) {
           return false;
         }
 
@@ -2114,7 +2109,10 @@ angular.module('myApp.controllers', ['myApp.i18n'])
       else if (replyToMarkup) {
         replyClear();
       }
-      $scope.$broadcast('ui_keyboard_update');
+      $scope.$broadcast('ui_keyboard_update', {
+        enabled: replyKeyboard && !replyKeyboard.pFlags.hidden &&
+          replyKeyboard._ == 'replyKeyboardMarkup'
+      });
     }
 
     function replyKeyboardToggle ($event) {

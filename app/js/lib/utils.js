@@ -1,5 +1,5 @@
 /*!
- * Webogram v0.4.6 - messaging web application for MTProto
+ * Webogram v0.4.7 - messaging web application for MTProto
  * https://github.com/zhukov/webogram
  * Copyright (C) 2014 Igor Zhukov <igor.beatle@gmail.com>
  * https://github.com/zhukov/webogram/blob/master/LICENSE
@@ -200,13 +200,13 @@ function getRichElementValue(node, lines, line, selNode, selOffset) {
       line.push(node.alt);
     }
   }
-  if (selNode === node) {
-    line.push('\001');
-  }
   var curChild = node.firstChild;
   while (curChild) {
     getRichElementValue(curChild, lines, line, selNode, selOffset);
     curChild = curChild.nextSibling;
+  }
+  if (selNode === node) {
+    line.push('\001');
   }
   if (isBlock && line.length) {
     lines.push(line.join(''));
@@ -235,6 +235,16 @@ function setRichFocus(field, selectNode) {
     textRange.collapse(false);
     textRange.select();
   }
+}
+
+function getSelectedText () {
+  var sel = (
+    window.getSelection && window.getSelection() ||
+    document.getSelection && document.getSelection() ||
+    document.selection && document.selection.createRange().text || ''
+  ).toString().replace(/^\s+|\s+$/g, '');
+
+  return sel;
 }
 
 function scrollToNode (scrollable, node, scroller) {

@@ -31,6 +31,20 @@
 
     <div class="md_modal_sections">
 
+      <div class="md_modal_versioned_section_wrap" ng-if="canShowVersion('0.4.7')">
+        <div class="md_modal_section_version">0.4.7</div>
+        <div class="md_modal_section_description changelog_version_changes">
+          <ul class="list-unstyled changelog_version_changes_list">
+            <li>New bot API, free for everyone. If you're an engineer, create your own bots for games, services or integrations.
+            </li>
+            <li>Check out <a href="https://telegram.org/blog/bot-revolution" target="_blank">Telegram Blog</a> for more info</li>
+            <li>Improved Stickers support: now stickers are loading much faster.</li>
+            <li>Click on any custom stickers in chats to view and add sticker sets.</li>
+            <li>[Mobile] Reply to a message easily: tap on any message and select "Reply".</li>
+          </ul>
+        </div>
+      </div>
+
       <div class="md_modal_versioned_section_wrap" ng-if="canShowVersion('0.4.6')">
         <div class="md_modal_section_version">0.4.6</div>
         <div class="md_modal_section_description changelog_version_changes">

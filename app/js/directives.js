@@ -1,5 +1,5 @@
 /*!
- * Webogram v0.4.6 - messaging web application for MTProto
+ * Webogram v0.4.7 - messaging web application for MTProto
  * https://github.com/zhukov/webogram
  * Copyright (C) 2014 Igor Zhukov <igor.beatle@gmail.com>
  * https://github.com/zhukov/webogram/blob/master/LICENSE
@@ -440,11 +440,11 @@ angular.module('myApp.directives', ['myApp.filters'])
         $scope.$emit('reply_button_press', button);
       }
 
-      $scope.$on('ui_keyboard_update', function () {
+      $scope.$on('ui_keyboard_update', function (e, data) {
         onContentLoaded(function () {
           scroller.updateHeight();
           scroller.scrollTo(0);
-          $scope.$emit('ui_panel_update');
+          $scope.$emit('ui_panel_update', {blur: data.enabled});
         })
       });
       onContentLoaded(function () {
@@ -1212,10 +1212,14 @@ angular.module('myApp.directives', ['myApp.filters'])
         });
       });
 
-      $scope.$on('ui_panel_update', function () {
+      $scope.$on('ui_panel_update', function (e, data) {
         onContentLoaded(function () {
           updateSizes();
-          $scope.$broadcast('ui_message_send');
+          if (data && data.blur) {
+            $scope.$broadcast('ui_message_blur');
+          } else if (!getSelectedText()) {
+            $scope.$broadcast('ui_message_send');
+          }
 
           $timeout(function () {
             $(scrollableWrap).trigger('scroll');
@@ -1610,6 +1614,9 @@ angular.module('myApp.directives', ['myApp.filters'])
         if (!Config.Navigator.touch) {
           focusField();
         }
+      });
+      $scope.$on('ui_message_blur', function () {
+        composer.blur();
       });
 
       function focusField () {
