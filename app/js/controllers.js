@@ -360,11 +360,13 @@ angular.module('myApp.controllers', ['myApp.i18n'])
         switch (error.type) {
           case 'PASSWORD_EMPTY':
             $scope.logIn();
+            error.handled = true;
             break;
           case 'PASSWORD_RECOVERY_NA':
             $timeout(function () {
               $scope.canReset = true;
             }, 1000);
+            error.handled = true;
             break;
         }
       })
@@ -1399,7 +1401,8 @@ angular.module('myApp.controllers', ['myApp.i18n'])
     }
 
     function toggleMessage (messageID, $event) {
-      if ($scope.historyState.startBot) {
+      if ($scope.historyState.startBot ||
+          $rootScope.idle.afterFocus) {
         return false;
       }
 
@@ -2160,6 +2163,12 @@ angular.module('myApp.controllers', ['myApp.i18n'])
       };
 
       delete $scope.draftMessage.replyToMessage;
+
+      if (newVal[0].lastModified) {
+        newVal.sort(function (file1, file2) {
+          return file1.lastModified - file2.lastModified;
+        });
+      }
 
       for (var i = 0; i < newVal.length; i++) {
         AppMessagesManager.sendFile($scope.curDialog.peerID, newVal[i], options);
