@@ -1457,6 +1457,7 @@ angular.module('myApp.directives', ['myApp.filters'])
         navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 
         voiceRecord.on('touchstart', function(e) {
+          if ($scope.$parent.$parent.voiceRecorder.processing) { return; }
           navigator.getUserMedia({audio : true}, function(stream){
             var start = Date.now();
             var touch = null;
